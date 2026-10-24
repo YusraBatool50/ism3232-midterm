@@ -3,11 +3,11 @@
 
 from business_rules import (
     calculate_quote,
-    requires_deposit,
-    needs_inspection,
-    total_quoted,
-    largest_rental,
     format_rental_line,
+    largest_rental,
+    needs_inspection,
+    requires_deposit,
+    total_quoted,
 )
 
 rentals = [
