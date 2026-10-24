@@ -19,6 +19,7 @@ def calculate_rental_cost(daily_rate: float, days: int) -> float:
 
 
 def get_rental_discount(days: int, contractor: bool = False) -> float:
+    """Return the applicable rental discount rate."""
     if days >= LONG_RENTAL_LIMIT:
         discount = LONG_RENTAL_DISCOUNT
     elif days >= SHORT_RENTAL_LIMIT:
@@ -26,31 +27,31 @@ def get_rental_discount(days: int, contractor: bool = False) -> float:
     else:
         discount = 0.0
 
-    if contractor:
-        discount = max(discount, CONTRACTOR_DISCOUNT)
+    if contractor and discount < CONTRACTOR_DISCOUNT:
+        discount = CONTRACTOR_DISCOUNT
 
     return discount
 
 def calculate_quote(
-    daily_rate: float, days: int, contractor: bool = False
-) -> float:
+    daily_rate: float, days: int, contractor: bool = False) -> float:
     cost = calculate_rental_cost(daily_rate, days)
     discount = get_rental_discount(days, contractor)
 
-    quote = cost * (1 - discount)
+    discounted_cost = cost * (1 - discount)
 
-    if days < SHORT_RENTAL_LIMIT:
-        quote += DAMAGE_WAIVER
+    if discounted_cost < WAIVER_THRESHOLD:
+        discounted_cost += DAMAGE_WAIVER
 
-    return round(quote, 2)
-
+    return round(discounted_cost, 2)
 
 def requires_deposit(quote: float) -> bool:
-    return quote > DEPOSIT_THRESHOLD
-
+    return quote >= DEPOSIT_THRESHOLD
 
 def needs_inspection(days: int, quote: float) -> bool:
-    return days >= INSPECTION_DAYS
+    return (
+        days >= INSPECTION_DAYS
+        and quote > INSPECTION_QUOTE_THRESHOLD
+    )
 
 
 def total_quoted(rentals: list) -> float:
