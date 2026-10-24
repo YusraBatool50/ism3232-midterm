@@ -9,9 +9,10 @@ LONG_RENTAL_DISCOUNT = 0.20
 CONTRACTOR_DISCOUNT = 0.10
 
 DAMAGE_WAIVER = 25.00
-
+WAIVER_THRESHOLD = 150.00
 DEPOSIT_THRESHOLD = 1000.00
-INSPECTION_DAYS = 7
+INSPECTION_DAYS = 5
+INSPECTION_QUOTE_THRESHOLD = 800.00
 
 def calculate_rental_cost(daily_rate: float, days: int) -> float:
     return daily_rate * days
